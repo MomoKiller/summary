@@ -84,5 +84,23 @@ div.dib{*display:inline; *zoom:1;}
 .mt15 {margin-top: 15px;}
 .mb15 {margin-bottom: 15px;}
 
-// 按钮禁用
-.disabled{outline:0 none; cursor:default!important; opacity:.4; filter:alpha(opacity=40); -ms-pointer-events:none; pointer-events:none;}
+
+
+// 按钮禁用状态
+.disabled{
+	outline:0 none; 
+	cursor:default!important; 
+	opacity:.4; 
+	filter:alpha(opacity=40); 
+	-ms-pointer-events:none; 
+	pointer-events:none;
+}
+
+
+
+
+
+
+
+
+

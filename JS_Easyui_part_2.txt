@@ -1,0 +1,846 @@
+
+
+
+|=========================================================================================================|
+|																										  |
+|																										  |
+|																										  |
+|																										  |
+|===============================  					js  技巧	     	   ===============================|
+|																										  |
+|																										  |
+|																										  |
+|																										  |
+|=========================================================================================================|
+
+
+
+
+
+
+// 另一种保存两位小数的方式
+Math.floor(numObj*100)/100
+
+
+
+
+// 获取当前时间的时间戳 -- 毫秒（ms）
+new Date().getTime();
+
+
+// js加载顺序--宏任务/微任务 
+// 宏任务函数 / 微任务函数
+console.log('a');
+setTimeout(() => {
+    console.log('b');
+}, 0);
+console.log('c');
+Promise.resolve().then(() => {
+    console.log('d');
+})
+.then(() => {
+    console.log('e');
+});
+
+console.log('f');
+
+
+
+
+// 判断是Array 和 Object  数组或JOSN对象
+Object.prototype.toString.call(value) === "[object Array]"		// 判断是否数组
+Object.prototype.toString.call(value) === "[object Object]"		// 判断是否JSON
+// 延伸
+Object.prototype.toString.call(window) === "[object Window]"	// Window 对象
+Object.prototype.toString.call(Window) === "[object Function]"	// Window 为Function 对象
+
+
+
+
+// BASE64 图片格式的使用
+HTML:
+	<img id="logoString" src="images/homePage/unlog.png" alt="..."/>
+JS:
+	var logoString = "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAGu5JREFUeNqsenlwXPd93+ede9+LxX0DBEESJCiRJikeMk0lsh1JI9lSxqrstknqxuM6bdJ/mjozqcZxpzNNZ5yZuI2rxm3qzKSK3Ti6fOgKJdKiSBEUTxAEcRLXAthd7H28u5+3oI7Ybu1JhZk3AHb3vff7Xp/j91ZwHAdmLouf/nFECbZWh90w4UD80BuAUN+E4E1DiQfhmCKsegZKqA+11Qn4kmMwCosRCPaArTkPlufOPFycXXe83YdesPTSj2HU7qQOPVI0Shnkrp1DMLUX+bUbCPbuRWL0MDLnv4/kic9DVH3bN+OPICnQ8ndQW7/Gv9WfWWvrfZ+HjI/iRxDdG0uKN7C/mpk+aWwt/mp57drxmYuTnqIVwcjxcQjVt47KhvrvLETfzs9OnIPlnJdU3xVJ9qx9FEuQ///WL0FUPP1mpfZQdvKVT5YWL9+TnrzYtrwsYGo5iCuZ3Vg3etA5H8Ou/iSGEgV/qzd3qrX6yilV8uqCEL9ZXyxeFgTPT0RReYvXmhYE8efd6e7xUQbCVuS9ekRZfqi8fOUTlfTcxzYnL3ZvpkuYvhPBanUcVrANvl4FR4aqiEVUmHYVpY0clmqtuOkkYdTbkfQX1NGO9fHW4Oy435v4QvnmnezGjR/NBfyxVyRZ+brj2LbbWoIkw7EMHvr/M5hfHIjg9qkIQbg7H171yVL+8p9unnspkVtZwdqGg6sbw6gqQ+gf8uKBAQ0jOxRIxiwqSwvwhOMQg93I3boCSQwC/iSWNoI4Px3GMy/74VUsjPdk5AO7zbaeTm/b2uULR3zT5/9aDkanBcZi1crQ8xk0SlNI7joO29D+gYGIBvPgh+Ll8JsCpJj8Txa/91zi3Ku3cNU6hYXKLhw6HMQT+yYxkJyFJXrQ2ALqpQKqeQm++hakKm8T70GjrhE8auiJ";
+	$("#logoString").attr("src","data:image/jpg;base64,"+logoString);
+
+
+
+
+
+// 关于函数join()和split()
+	var array = [a,b,c,d,e,f,g];
+	array.join(',');  		// "a,b,c,d,e,f,g"
+	result.split(','); 		// [a,b,c,d,e,f,g]
+	
+	
+
+/**
+ * 动态加载 js 文件
+ * js 文件按需加载
+ */
+(function(){
+	var srcript, 
+		srcripts = document.getElementsByTagName('srcript')[0];
+	function load(url){
+		srcript = document.createElement('srcript');
+		srcript.async = true;
+		srcript.src = url;
+		srcripts.parentNode.insertBefore(srcript, srcripts);
+	}
+	
+	load('//api.google.com/js/plusone1.js');
+	load('//api.google.com/js/plusone2.js');
+	load('//api.google.com/js/plusone3.js');
+}())
+
+
+
+
+// 动态创建js
+
+function loadjs(script_filename) {
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', script_filename);
+    script.setAttribute('id', 'coolshell_script_id');
+ 
+    script_id = document.getElementById('coolshell_script_id');
+    if(script_id){
+        document.getElementsByTagName('head')[0].removeChild(script_id);
+    }
+    document.getElementsByTagName('head')[0].appendChild(script);
+}
+ 
+var script = 'http://coolshell.cn/asyncjs/alert.js';
+loadjs(script);
+ 
+ 
+
+
+// 键盘监听事件
+document.onkeydown=function(event){
+    var e = event || window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode==13){ // enter 键
+		doSomething();
+	}
+	if(e && e.keyCode==27){ // 按 Esc 
+        doSomething();
+	}
+	if(e && e.keyCode==113){ // 按 F2 
+        doSomething();
+	}            
+}; 
+
+
+
+
+// 获取当前页面url中参数的 方法
+function GetRequest() {
+	var url = location.search; //获取url中"?"符后的字串
+	var theRequest = new Object();
+		if (url.indexOf("?") != -1) {
+		   var str = url.substr(1);
+			strs = str.split("&");
+		      for(var i = 0; i < strs.length; i ++) {
+		         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+		      }
+		   }
+	return theRequest;		
+}	
+
+
+
+
+八、另外整理的一些获取页面宽度、高度的方法
+	var s = "";
+	s += " 网页可见区域宽："+ document.body.clientWidth;
+	s += " 网页可见区域高："+ document.body.clientHeight;
+	s += " 网页可见区域宽："+ document.body.offsetWidth + " (包括边线和滚动条的宽)";
+	s += " 网页可见区域高："+ document.body.offsetHeight + " (包括边线的宽)";
+	s += " 网页正文全文宽："+ document.body.scrollWidth;
+	s += " 网页正文全文高："+ document.body.scrollHeight;
+	s += " 网页被卷去的高(ff)："+ document.body.scrollTop;
+	s += " 网页被卷去的高(ie)："+ document.documentElement.scrollTop;
+	s += " 网页被卷去的左："+ document.body.scrollLeft;
+	s += " 网页正文部分上："+ window.screenTop;
+	s += " 网页正文部分左："+ window.screenLeft;
+	s += " 屏幕分辨率的高："+ window.screen.height;
+	s += " 屏幕分辨率的宽："+ window.screen.width;
+	s += " 屏幕可用工作区高度："+ window.screen.availHeight;
+	s += " 屏幕可用工作区宽度："+ window.screen.availWidth;
+	s += " 你的屏幕设置是 "+ window.screen.colorDepth +" 位彩色";
+	s += " 你的屏幕设置 "+ window.screen.deviceXDPI +" 像素/英寸"; 
+	
+	// 常见获取宽度和高度的方法：
+	// domWidth = document.body.clientWidth || document.body.scrollWidth;
+	// domHeight = document.body.clientHeight || document.body.scrollHeight;
+
+
+七、获取某个控件高度的方法
+	var o = document.getElementById("viewID");												//view指控件的ID
+	var h = o.offsetHeight;  //高度
+	var w = o.offsetWidth;  //宽度
+	
+	
+
+//获取浏览器参数
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]); return null;
+}
+
+
+
+
+
+十八、COOKIE 封装
+	function getCookie(name){ 
+		var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)"); 
+		if(arr=document.cookie.match(reg)) return unescape(arr[2]); 
+		else return null; 
+	} 
+
+	function setCookie(name,value){
+		var Days = 30;
+		var exp = new Date();
+		exp.setTime(exp.getTime() + Days*24*60*60*1000);
+		document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+	}
+
+	function getCookie(c_name){
+		if (document.cookie.length>0){
+			c_start=document.cookie.indexOf(c_name + "=");
+			if (c_start!=-1){
+				c_start=c_start + c_name.length+1
+				c_end=document.cookie.indexOf(";",c_start)
+				if (c_end==-1) c_end=document.cookie.length
+				return unescape(document.cookie.substring(c_start,c_end))
+			}
+		}
+		return ""
+	}
+
+	function delCookie(name) {
+		var exp = new Date();
+		exp.setTime(exp.getTime() - 1);
+		var cval = getCookie(name);
+		if (cval != null)
+			document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+	}
+
+
+
+六二、
+	window.history.go(-1);  // 返回上一页
+	window.history.back();  // 返回上一页
+	location.reload();		// 网页刷新
+
+// 浏览器回退事件监听
+	location.onPopState(() => {
+		doSomething();
+	});
+
+
+
+
+
+
+
+// ==============================获取指定时间的间隔日期 start==============================
+/**
+ * 获取指定时间的间隔日期
+ * dataTemp {String} "2021-03-18" 指定日期
+ * days {Number} 5 指定日期后的第5日
+ */
+function getNewDay(dateTemp, days) {
+    var dateTemp = dateTemp.split("-");
+    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式
+    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
+    var rDate = new Date(millSeconds);
+    var year = rDate.getFullYear();
+    var month = rDate.getMonth() + 1;
+    if (month < 10) month = "0" + month;
+    var date = rDate.getDate();
+    if (date < 10) date = "0" + date;
+    return (year + "-" + month + "-" + date);
+}
+	
+ 
+function getNewDay(dateTemp,days){
+    var d=new Date(dateTemp);
+    d.setDate(d.getDate()+days);
+    var m=d.getMonth()+1;
+    return d.getFullYear()+'-'+m+'-'+d.getDate();
+}	
+
+/* 不兼容火狐 */
+function getNewDay(dateTemp, days) {
+    var dateTemp = dateTemp.split("-");
+    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式
+    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
+    var rDate = new Date(millSeconds);
+    var year = rDate.getFullYear();
+    var month = rDate.getMonth() + 1;
+    if (month < 10) month = "0" + month;
+    var date = rDate.getDate();
+    if (date < 10) date = "0" + date;
+    return (year + "-" + month + "-" + date);
+}
+
+// ==============================获取指定时间的间隔日期 end==============================
+
+
+
+
+
+
+六八、获取浏览器参数方法的两个方法
+a:
+getQueryString: function (name) {		
+	var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
+	var result = window.location.search.substr(1).match(reg);
+	return result?decodeURIComponent(result[2]):null;
+},		
+b:
+getQueryString: function (name) {		
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]); return null;
+},
+
+
+
+
+// 时间戳转换成 yyyy-MM-dd HH-mm-ss
+方法1：
+function formatDateTime(inputTime) {  
+    var date = new Date(inputTime);
+    var y = date.getFullYear();  
+    var m = date.getMonth() + 1;  
+    m = m < 10 ? ('0' + m) : m;  
+    var d = date.getDate();  
+    d = d < 10 ? ('0' + d) : d;  
+    var h = date.getHours();
+    h = h < 10 ? ('0' + h) : h;
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    minute = minute < 10 ? ('0' + minute) : minute;  
+    second = second < 10 ? ('0' + second) : second; 
+    return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;  
+};
+
+formatDateTime(inputTime);
+
+
+
+// 特殊时间格式化
+formateDate: function(date){
+	var arr=date.split("T");
+	var d=arr[0];  
+	var darr = d.split('-');
+	var t=arr[1];
+	var tarr = t.split('.000');
+	var marr = tarr[0].split(':');
+	
+	var y = parseInt(darr[0]);
+	var m = parseInt(darr[1]);
+	m = m < 10 ? ('0' + m) : m;
+	var d = parseInt(darr[2]);
+	d = d < 10 ? ('0' + d) : d;
+	var h = parseInt(marr[0]) + 8;
+	h = h < 10 ? ('0' + h) : h;
+	var minute = parseInt(marr[1]);
+	minute = minute < 10 ? ('0' + minute) : minute;
+	var secound = parseInt(marr[2]);
+	secound = secound < 10 ? ('0' + secound) : secound;
+
+	return y +'-'+ m +'-'+ d +' '+ h +':'+ minute +':'+ secound;
+},
+
+
+
+
+// 深拷贝(复制对象的结构和属性，而非指针)
+a: 递归递归去复制所有层级属性。
+	function deepClone(obj){
+		let objClone = Array.isArray(obj)?[]:{};
+		if(obj && typeof obj==="object"){
+			for(key in obj){
+				if(obj.hasOwnProperty(key)){
+					//判断ojb子元素是否为对象，如果是，递归复制
+					if(obj[key]&&typeof obj[key] ==="object"){
+						objClone[key] = deepClone(obj[key]);
+					}else{
+						//如果不是，简单复制
+						objClone[key] = obj[key];
+					}
+				}
+			}
+		}
+		return objClone;
+	}    
+	
+b:JSON对象的parse和stringify
+	JSON.parse(JSON.stringify(obj));
+
+c:JQ的extend方法
+	b=$.extend(true,[],obj);
+	
+
+
+
+
+
+
+
+//构造函数继承
+function fn(){
+	this.name = "hello ";
+}
+
+function gz(){
+	fn.call(this);
+}
+
+var test1 = new gz();
+test1.name += "world";
+console.log(test1.name);
+
+// 原型链继承
+function yxl(){}
+yxl.prototype = new fn();
+
+var test2 = new yxl();
+test2.name += "world";
+console.log(test2.name);
+
+
+
+
+
+
+
+
+
+
+// CLASS <=> 构造函数  ->  原型链继承
+class Point {
+	constructor (x, y) {
+		this.x =x;
+		this.y =y;
+	}
+	toString () {
+		return `( ${this.x}, ${this.y} )`;
+	}
+	toValue () {
+		return this.x+this.y;
+	}
+}
+
+var p = new Point(1,2);
+p.toString();				//"(1,2)"
+p.toValue();				//3
+
+<=>
+
+function Point(x,y) {
+	this.x = x;
+	this.y = y;
+}
+Point.prototype.toString() = function() {
+	return `( ${this.x}, ${this.y} )`;
+}
+Point.prototype.toValue() = function() {
+	return this.x+this.y;
+}
+
+
+
+
+
+
+
+// postMessage iframe与页面之间的通信
+1、父页面向子 iframe 传值
+	a：获取父页面dom,  postMessage 发送data 和 子 iframe 的地址;
+	var frame = document.getElementById('faIframe');
+	frame.contentWindow.postMessage(dataValue, 'data传递iframe的url');
+	
+	b: 子 iframe 监听获取父页面传递值;
+	window.addEventListener('message', function(e){
+		var data = e.data;
+		...
+	});
+	
+2、子 iframe 向父页面传值
+	a: 子 iframe 向父级传送 data 和 父页面地址
+	window.parent.postMessage(data, 'url...');
+	
+	b: 父页面监听获取数据
+	window.addEventListener('message', function(e){
+		var data = e.data;
+		...
+	});
+	
+	
+
+// 进入全屏 
+function requestFullScreen() {
+    var de = document.documentElement;
+    if (de.requestFullscreen) {
+        de.requestFullscreen();
+    } else if (de.mozRequestFullScreen) {
+        de.mozRequestFullScreen();
+    } else if (de.webkitRequestFullScreen) {
+        de.webkitRequestFullScreen();
+    }
+}
+
+
+// 退出全屏
+function exitFullscreen() {
+    var de = document;
+    if (de.exitFullscreen) {
+        de.exitFullscreen();
+    } else if (de.mozCancelFullScreen) {
+        de.mozCancelFullScreen();
+    } else if (de.webkitCancelFullScreen) {
+        de.webkitCancelFullScreen();
+    }
+}
+
+
+// 节流 | 时间间隔内会执行一次 
+var isUsed = false;
+if(!isUsed) {
+	doSomething();			// 第一次执行代码
+	setTimeout(() => {
+		isUsed = false; 	// 状态重置
+	}, 400);
+}
+
+// 防抖 | 最后一次执行
+var timer = null;
+if(timer){
+	clearTimer(timer);
+	timer = null;
+	timer = setTimeout(() => {
+		doSomething();
+	}, 400);
+}else{
+	timer = setTimeout(() => {
+		doSomething();
+	}, 400);
+}
+
+
+
+
+
+// 设置header透明度渐变
+document.addEventListener('scroll', (e) => {
+  var scrollTop = 0
+  if(document.documentElement&&document.documentElement.scrollTop) {
+	scrollTop = document.documentElement.scrollTop;
+  } else if(document.body) {
+	scrollTop = document.body.scrollTop;
+  }
+  scrollTop = scrollTop > 90 ? 90 : scrollTop
+  this.opacity = scrollTop / 90
+})
+
+
+
+// 阶乘计算
+var mult = function(){     
+	console.log( '开始计算乘积' );     
+	var a = 1;     
+	for ( var i = 0, l = arguments.length; i < l; i++ ){         
+		a = a * arguments[i];      
+	}      
+	return a; 
+};
+mult(2,3,5);
+
+
+
+
+// 金额展示  3位数字用","间隔
+filters: {
+	thousandBit(value) {
+	  return value ? String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
+	}
+},
+
+
+
+
+// js 判断页面加载完成
+document.onreadystatechange = this.isOnReady;
+isOnReady() {
+  if (document.readyState == "complete") {
+	doSomething()....
+  }
+},
+
+// js 判断页面加载完成 -- VUE
+this.$nextTick(() => {
+	doSomething()....
+});
+
+
+
+
+
+// 原生js 改变高度
+var domWidth =document.getElementsByClassName('ppdoFour_d_d fl_l')[0].offsetHeight;
+var domHeight =document.getElementsByClassName('ppdoFour_d_d fl_l')[0].offsetWidth;
+document.getElementsByClassName('ppdoFour_right')[0].style.height = elem_ppdoFour_width-1+"px";
+document.getElementsByClassName('ppdoFour_right')[0].style.width = elem_ppdoThree_height-1+"px";
+
+
+
+
+
+
+
+
+
+
+
+// H5 下载图片
+downloadIamge(imgsrc, name) {//下载图片地址和图片名
+	var image = new Image();
+	// 解决跨域 Canvas 污染问题
+	image.setAttribute("crossOrigin", "anonymous");
+	image.onload = function () {
+		var canvas = document.createElement("canvas");
+		canvas.width = image.width;
+		canvas.height = image.height;
+		var context = canvas.getContext("2d");
+		context.drawImage(image, 0, 0, image.width, image.height);
+		var url = canvas.toDataURL("image/png"); //得到图片的base64编码数据
+		var a = document.createElement("a"); // 生成一个a元素
+		var event = new MouseEvent("click"); // 创建一个单击事件
+		a.download = name || "photo"; // 设置图片名称
+		a.href = url; // 将生成的URL设置为a.href属性
+		a.dispatchEvent(event); // 触发a的单击事件
+	};
+	image.src = imgsrc;
+}
+		
+	
+
+
+// 复制文本到剪切板 - js兼容安卓和IOS的
+function copy(message) {
+	var input = document.createElement("input");
+	input.value = message;
+	document.body.appendChild(input);
+	input.select();
+	input.setSelectionRange(0, input.value.length), document.execCommand('Copy');
+	document.body.removeChild(input);
+	$.toast("复制成功", "text");
+}
+
+
+
+
+
+十九、indexOf()函数 返回在 String 对象中第一次出现子字符串的字符位置。当未找到返回值时则返回 -1
+	var str = "hello world!";
+	var a=str.indexOf("hello");
+	var b=str.indexOf("Hello");
+	var c=str.indexOf("world");
+	返回结果：
+	a=0;
+	b=-1; //区分大小写 查找无结果 返回 -1
+	c=6;
+
+
+
+二三、浏览器最大化、最小化、或者改变大小是触发该事件，并且刷新页面
+参考网站：http://www.jb51.net/article/14397.htm
+window.onresize = function(){
+	location.reload(false);		//当为true时重新获取数据加载页面 当为false时获取缓存并刷新页面
+}	
+//当前页面禁用 onresize 事件
+window.onresize = function(e){
+	if(e && e.preventDefault){
+		e.preventDefault();	// 阻止默认事件
+	}else{
+		window.event.returnValue = false;
+	}
+	return false;
+}
+
+
+
+
+//****************************控制html或jsp页面乱码 加载css start********************************	
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+//****************************控制html或jsp页面乱码 加载css end********************************
+	
+	
+	
+//****************************favicon.ico图标位置 加载css start********************************
+	<link rel="icon" href="favicon.ico">
+//****************************favicon.ico图标位置 加载css end********************************	
+
+
+
+
+三五、 JS数组去重
+	function unique(arr) {
+		var result = [], hash = {};
+		for (var i = 0, elem; (elem = arr[i]) != null; i++) {
+			if (!hash[elem]) {
+				result.push(elem);
+				hash[elem] = true;
+			}
+		}
+		return result;
+	}
+	2、利用 Object.keys() 方法枚举 && 对象不能有相同的属性方法 
+	function unique(arr){
+		var tempKey = {};
+		for(var i=0; i<arr.length; i++){
+			tempKey[arr[i]] = 0;
+		}
+		return Object.keys(tempKey)；
+	}
+
+
+
+/**
+ * 通过浏览器对象 userAgent 中的参数判断浏览器类型
+ *
+ */
+function myBrowser(){
+    var userAgent = navigator.userAgent;  
+    if (userAgent.indexOf("Opera") > -1) {
+        return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+        return "FF";
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+  		return "Chrome";
+ 	}
+    if (userAgent.indexOf("Safari") > -1) {
+        return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+        return "IE";
+    }; //判断是否IE浏览器
+}
+
+
+
+
+// 获取当前日期
+function getCurrentDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+    return currentdate;
+}
+
+
+
+
+
+
+六五、Throw 声明 - 报错处理
+	var x=prompt("请输入 0 至 10 之间的数：","")
+	try
+	{ 
+		if(x>10) 
+		  throw "Err1" 
+		else if(x<0)
+		  throw "Err2"
+		else if(isNaN(x))
+		  throw "Err3"
+	} 
+	catch(er)
+	{
+		if(er=="Err1") 
+		  alert("错误！该值太大！")
+		if(er == "Err2") 
+		  alert("错误！该值太小！") 
+		if(er == "Err3") 
+		  alert("错误！该值不是数字！") 
+	}
+
+
+
+
+
+
+//七十、判断是否有滚动条
+if(document.body.style.overflow!="hidden" 
+	&& document.body.scroll!="no"
+	&& document.body.scrollHeight>document.body.offsetHeight){
+	alert("有滚动条");
+}else{
+	alert("无滚动条");
+}
+
+
+
+
+/**
+ * 文件下载
+ * fileName {String} 下载的文件名 	
+ * url {String}  文件下载地址，链接
+ */
+let download => (filename,url){
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true);
+	xhr.responseType = 'blob';
+	xhr.onload = ()=> {
+		if (xhr.status === 200) {
+			let blob = xhr.response;
+			if (window.navigator.msSaveOrOpenBlob) {
+				navigator.msSaveBlob(blob, filename);
+			} else {
+				let link = document.createElement('a');
+				let body = document.querySelector('body');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = filename;
+				link.style.display = 'none';
+				body.appendChild(link);
+				link.click();
+				body.removeChild(link);
+				window.URL.revokeObjectURL(link.href);
+			};
+		}
+	};
+	xhr.send();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

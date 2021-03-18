@@ -1,0 +1,93 @@
+
+
+
+|=========================================================================================================|
+|																										  |
+|																										  |
+|																										  |
+|																										  |
+|===============================  					关于设置	     	   ===============================|
+|																										  |
+|																										  |
+|																										  |
+|																										  |
+|=========================================================================================================|
+
+
+
+
+
+// 设置chrome 跨域
+C:\Users\wuwenping\AppData\Local\Google\Chrome\Application\chrome.exe --args --disable-web-security --user-data-dir="C:/ChromeDevSession"
+
+
+
+
+// 创建 npm 包
+https://blog.csdn.net/qq_36256944/article/details/80459383
+已创建 npm 账号密码：
+FullName: MomoKiller 
+userName: momokiller
+password: rainmanBadboy..
+
+
+
+// 'use strict';
+"use strict" 指令在 JavaScript 1.8.5 (ECMAScript5) 中新增。
+它不是一条语句，但是是一个字面量表达式，在 JavaScript 旧版本中会被忽略。
+"use strict" 的目的是指定代码在严格条件下执行。
+严格模式下你不能使用未声明的变量。
+
+
+
+// git pull 强制覆盖本地文件
+$ git fetch --all
+$ git reset --hard origin/master 
+$ git pull
+
+
+
+// chrome 浏览器调试
+chrome://inspect/#devices
+
+
+
+
+// 懒加载
+1、应用lazyload.js
+2、使用lazyload.js中的方法 
+
+
+
+
+
+
+// manifest 离线缓存技术
+<!DOCTYPE html>
+<html manifest = 'test.manifest'>
+<head>
+	<meta charset='utf-8'>
+	<title>离线存储技术</title>
+</head>
+<body>
+	<img src='img1.png'>
+	<img src='img2.png'>
+</body>
+</html>
+
+test.manifest 文件内容：(只缓存了第一张图片的内容)
+
+CACHE MANIFEST 
+#v01 
+img1.png 
+NETWORK:* 
+FALLBACK: /
+
+
+
+
+
+
+
+
+

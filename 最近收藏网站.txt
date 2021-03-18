@@ -27,11 +27,31 @@ https://segmentfault.com/a/1190000021494964?utm_source=tag-newest
 https://www.cnblogs.com/navysummer/p/9390661.html
 // We - 开源镜像站
 http://mirrors.neusoft.edu.cn/
+// 语句和表达式
+https://www.cnblogs.com/qlqwjy/p/7660590.html
+// Object.defineProperty  
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+// Dreader -  three.js 开发的H5 游戏
+https://gamasexual.com/c/f/g/dreader/
+// 关于js的继承
+https://juejin.im/post/5ccff45a51882541b07a9e3d
+// 单页面应用
+https://www.cnblogs.com/zion0707/p/5204161.html
+// 关于正则表达式的使用方法：
+http://www.cnblogs.com/jiuban2391/p/6061542.html  
+// 网页自适应宽度设计
+http://www.ruanyifeng.com/blog/2012/05/responsive_web_design.html
+spring+springMVC+myBatis 样例
+http://ju.outofmemory.cn/entry/100681
+鼠标监听事件
+http://www.cnblogs.com/rubylouvre/archive/2009/08/24/1552862.html   				
+// 关于js的继承
+https://juejin.im/post/5ccff45a51882541b07a9e3d
 
 
 
 
-
+// promise 使用栗子
 
 
 /**************** 栗子start *********************/
@@ -172,6 +192,8 @@ loadImg(url1).then(() => {
 	return loadImg(url3)
 })
 /*********** 加载图片栗子 end ******************/ 
+
+
 
 
 

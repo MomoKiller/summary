@@ -34,10 +34,10 @@ http://www.w3school.com.cn/tiy/t.asp?f=csse_class-clear
 
 
 
-//============== 表格边框 ==============
+//============== 表格边框合并 ==============
 table
 {
-	border-collapse:collapse;
+	border-collapse: collapse;
 }
   
   
@@ -612,6 +612,7 @@ a {
 	-moz-user-focus: none;
     -moz-user-select: none;
 }
+
 /* 长按出蓝色背景 */
 a,a:hover,a:active,a:visited,a:link,a:focus{
     -webkit-tap-highlight-color:rgba(0,0,0,0);
@@ -620,6 +621,7 @@ a,a:hover,a:active,a:visited,a:link,a:focus{
     background: none;
     text-decoration: none;
 }
+
 ::selection { 
     background: #FFF; 
     color: #333; 
@@ -728,13 +730,38 @@ font-family:"Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHe
 	#blue: 		#488aff;
 	
 	
-// 比较流行的数字字体
-font-family: DIN-Medium;	
+
+//====================== nth选择器 ======================
+a: table第一列
+	table tr td:first-child{
+		width:15%;
+	}
+b：第N列
+	table tr td:nth-child(2){
+		width: 25%;
+	}
+	table tr td:nth-child(3){
+		width: 10%;
+	}
+c: table 奇数行偶数行
+	table tr:nth-child(odd)	{
+		background-color: #f1f1f1;
+	}
+	table tr:nth-child(even) {
+		background-color: #ffffff;
+	}		
+
+
+十二、表格设置合并边框模型(页面)：   
+ table
+  {
+	border-collapse:collapse;
+  }
+
 	
-	
-	
-	
-	
+
+// p a 标签换行
+	world-break: break-all; // 或者其它参数
 	
 	
 
