@@ -29,7 +29,7 @@
 
 [加链接的文字](http://helloword.com)
 
-![金蛋](http://testonekeycleanh5.wukongclean.com/img/activitiesImg/goldenEgg/bg-rule-egg.png "金蛋图片")  
+![金蛋]('' "金蛋图片")  
 
 
 
