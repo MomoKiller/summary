@@ -18,18 +18,333 @@
 
 
 
+
+//**********************浏览器事件 start*********************
+
+// 浏览器回退监听
+location.onPopState(() => {
+	doSomething();
+});
+
+
+
+// 获取浏览器参数方法
+a:
+getQueryString: function (name) {		
+	var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
+	var result = window.location.search.substr(1).match(reg);
+	return result?decodeURIComponent(result[2]):null;
+},		
+b:
+getQueryString: function (name) {		
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]); return null;
+},
+
+
+
+// 浏览器 resize 事件监听 -- 参考网站：http://www.jb51.net/article/14397.htm
+window.onresize = function(){
+	location.reload(false);		//当为true时重新获取数据加载页面 当为false时获取缓存并刷新页面
+}	
+
+// 禁用 onresize 事件
+window.onresize = function(e){
+	if(e && e.preventDefault){
+		e.preventDefault();			// 阻止默认事件
+	}else{
+		window.event.returnValue = false;
+	}
+	return false;
+}
+
+
+// 浏览器判断 -- userAgent 参数判断
+function myBrowser(){
+    var userAgent = navigator.userAgent;  
+    if (userAgent.indexOf("Opera") > -1) {
+        return "Opera"
+    }; //判断是否Opera浏览器
+    if (userAgent.indexOf("Firefox") > -1) {
+        return "FF";
+    } //判断是否Firefox浏览器
+    if (userAgent.indexOf("Chrome") > -1){
+  		return "Chrome";
+ 	}
+    if (userAgent.indexOf("Safari") > -1) {
+        return "Safari";
+    } //判断是否Safari浏览器
+    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+        return "IE";
+    }; //判断是否IE浏览器
+}
+
+//**********************浏览器事件 end*********************
+
+
+
+
+
+//**********************日期时间设置 start*********************
+
+/**
+ * 获取指定时间的间隔日期
+ * dataTemp {String} "2021-03-18" 指定日期
+ * days {Number} 5 指定日期后的第5日
+ */
+function getNewDay(dateTemp, days) {
+    var dateTemp = dateTemp.split("-");
+    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式
+    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
+    var rDate = new Date(millSeconds);
+    var year = rDate.getFullYear();
+    var month = rDate.getMonth() + 1;
+    if (month < 10) month = "0" + month;
+    var date = rDate.getDate();
+    if (date < 10) date = "0" + date;
+    return (year + "-" + month + "-" + date);
+}
+	
+ 
+function getNewDay(dateTemp,days){
+    var d=new Date(dateTemp);
+    d.setDate(d.getDate()+days);
+    var m=d.getMonth()+1;
+    return d.getFullYear()+'-'+m+'-'+d.getDate();
+}	
+
+/* 不兼容火狐 */
+function getNewDay(dateTemp, days) {
+    var dateTemp = dateTemp.split("-");
+    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式
+    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
+    var rDate = new Date(millSeconds);
+    var year = rDate.getFullYear();
+    var month = rDate.getMonth() + 1;
+    if (month < 10) month = "0" + month;
+    var date = rDate.getDate();
+    if (date < 10) date = "0" + date;
+    return (year + "-" + month + "-" + date);
+}
+
+// 时间戳转换成 yyyy-MM-dd HH-mm-ss
+function formatDateTime(inputTime) {  
+    var date = new Date(inputTime);
+    var y = date.getFullYear();  
+    var m = date.getMonth() + 1;  
+    m = m < 10 ? ('0' + m) : m;  
+    var d = date.getDate();  
+    d = d < 10 ? ('0' + d) : d;  
+    var h = date.getHours();
+    h = h < 10 ? ('0' + h) : h;
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    minute = minute < 10 ? ('0' + minute) : minute;  
+    second = second < 10 ? ('0' + second) : second; 
+    return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;  
+};
+
+// 特殊时间格式化
+formateDate: function(date){
+	var arr=date.split("T");
+	var d=arr[0];  
+	var darr = d.split('-');
+	var t=arr[1];
+	var tarr = t.split('.000');
+	var marr = tarr[0].split(':');
+	var y = parseInt(darr[0]);
+	var m = parseInt(darr[1]);
+	m = m < 10 ? ('0' + m) : m;
+	var d = parseInt(darr[2]);
+	d = d < 10 ? ('0' + d) : d;
+	var h = parseInt(marr[0]) + 8;
+	h = h < 10 ? ('0' + h) : h;
+	var minute = parseInt(marr[1]);
+	minute = minute < 10 ? ('0' + minute) : minute;
+	var secound = parseInt(marr[2]);
+	secound = secound < 10 ? ('0' + secound) : secound;
+	return y +'-'+ m +'-'+ d +' '+ h +':'+ minute +':'+ secound;
+},
+
+
+
+/* 获取当前时间的时间戳 -- 毫秒（ms） */
+new Date().getTime();
+
+//**********************日期时间设置 end*********************
+
+
+
+
+
+
+//**********************COOKIE 封装 start*********************
+
+function getCookie(name){ 
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)"); 
+	if(arr=document.cookie.match(reg)) return unescape(arr[2]); 
+	else return null; 
+} 
+
+function setCookie(name,value){
+	var Days = 30;
+	var exp = new Date();
+	exp.setTime(exp.getTime() + Days*24*60*60*1000);
+	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+
+function getCookie(c_name){
+	if (document.cookie.length>0){
+		c_start=document.cookie.indexOf(c_name + "=");
+		if (c_start!=-1){
+			c_start=c_start + c_name.length+1
+			c_end=document.cookie.indexOf(";",c_start)
+			if (c_end==-1) c_end=document.cookie.length
+			return unescape(document.cookie.substring(c_start,c_end))
+		}
+	}
+	return ""
+}
+
+function delCookie(name) {
+	var exp = new Date();
+	exp.setTime(exp.getTime() - 1);
+	var cval = getCookie(name);
+	if (cval != null)
+		document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+}
+
+//**********************COOKIE 封装 end*********************
+
+
+
+
+
+
+
+//**********************页面宽高获取 start*********************
+
+	网页可见区域宽：document.body.clientWidth;
+	网页可见区域高：document.body.clientHeight;
+	网页可见区域宽：document.body.offsetWidth; 		// 包括边线和滚动条的宽
+	网页可见区域高：document.body.offsetHeight;		// 包括边线的宽
+	网页正文全文宽：document.body.scrollWidth;
+	网页正文全文高：document.body.scrollHeight;
+	网页被卷去的高(ff)：document.body.scrollTop;
+	网页被卷去的高(ie)：document.documentElement.scrollTop;
+	网页被卷去的左：document.body.scrollLeft;
+	网页正文部分上：window.screenTop;
+	网页正文部分左：window.screenLeft;
+	屏幕分辨率的高：window.screen.height;
+	屏幕分辨率的宽：window.screen.width;
+	屏幕可用工作区高度：window.screen.availHeight;
+	屏幕可用工作区宽度：window.screen.availWidth;
+	屏幕彩色位设置是: window.screen.colorDepth;
+	屏幕像素/英寸设置: window.screen.deviceXDPI; 
+	
+// 常见获取宽度和高度的方法：
+	domWidth = document.body.clientWidth || document.body.scrollWidth;
+	domHeight = document.body.clientHeight || document.body.scrollHeight;
+
+
+// 获取dom控件的宽高
+	document.getElementById('#viewID').offsetHeight;
+	document.getElementById('#viewID').offsetWidth;
+
+//**********************页面宽高获取 end*********************
+
+
+
+
+
+
+//**********************深拷贝 start*********************
+
+// 复制对象的结构和属性，而非指针
+a: 递归递归去复制所有层级属性。
+	function deepClone(obj){
+		let objClone = Array.isArray(obj)?[]:{};
+		if(obj && typeof obj==="object"){
+			for(key in obj){
+				if(obj.hasOwnProperty(key)){
+					//判断ojb子元素是否为对象，如果是，递归复制
+					if(obj[key]&&typeof obj[key] ==="object"){
+						objClone[key] = deepClone(obj[key]);
+					}else{
+						//如果不是，简单复制
+						objClone[key] = obj[key];
+					}
+				}
+			}
+		}
+		return objClone;
+	}    
+	
+b:JSON对象的parse和stringify
+	JSON.parse(JSON.stringify(obj));
+
+c:JQ的extend方法
+	b=$.extend(true,[],obj);
+	
+//**********************深拷贝 end*********************	
+
+
+
+
+
+
+
+//**********************动态加载 js 文件 start*********************	
+
+(function(){
+	var srcript, 
+		srcripts = document.getElementsByTagName('srcript')[0];
+	function load(url){
+		srcript = document.createElement('srcript');
+		srcript.async = true;
+		srcript.src = url;
+		srcripts.parentNode.insertBefore(srcript, srcripts);
+	}
+	
+	load('//api.google.com/js/plusone1.js');
+	load('//api.google.com/js/plusone2.js');
+	load('//api.google.com/js/plusone3.js');
+}())
+
+// 动态创建js
+function loadjs(script_filename) {
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', script_filename);
+    script.setAttribute('id', 'coolshell_script_id');
+ 
+    script_id = document.getElementById('coolshell_script_id');
+    if(script_id){
+        document.getElementsByTagName('head')[0].removeChild(script_id);
+    }
+    document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+//**********************动态加载 js 文件 end*********************	
+
+
+
+
+
+
+
+
+
 // 另一种保存两位小数的方式
 Math.floor(numObj*100)/100
 
 
 
 
-// 获取当前时间的时间戳 -- 毫秒（ms）
-new Date().getTime();
 
 
 // js加载顺序--宏任务/微任务 
-// 宏任务函数 / 微任务函数
 console.log('a');
 setTimeout(() => {
     console.log('b');
@@ -75,46 +390,7 @@ JS:
 	
 	
 
-/**
- * 动态加载 js 文件
- * js 文件按需加载
- */
-(function(){
-	var srcript, 
-		srcripts = document.getElementsByTagName('srcript')[0];
-	function load(url){
-		srcript = document.createElement('srcript');
-		srcript.async = true;
-		srcript.src = url;
-		srcripts.parentNode.insertBefore(srcript, srcripts);
-	}
-	
-	load('//api.google.com/js/plusone1.js');
-	load('//api.google.com/js/plusone2.js');
-	load('//api.google.com/js/plusone3.js');
-}())
 
-
-
-
-// 动态创建js
-
-function loadjs(script_filename) {
-    var script = document.createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('src', script_filename);
-    script.setAttribute('id', 'coolshell_script_id');
- 
-    script_id = document.getElementById('coolshell_script_id');
-    if(script_id){
-        document.getElementsByTagName('head')[0].removeChild(script_id);
-    }
-    document.getElementsByTagName('head')[0].appendChild(script);
-}
- 
-var script = 'http://coolshell.cn/asyncjs/alert.js';
-loadjs(script);
- 
  
 
 
@@ -152,83 +428,7 @@ function GetRequest() {
 
 
 
-八、另外整理的一些获取页面宽度、高度的方法
-	var s = "";
-	s += " 网页可见区域宽："+ document.body.clientWidth;
-	s += " 网页可见区域高："+ document.body.clientHeight;
-	s += " 网页可见区域宽："+ document.body.offsetWidth + " (包括边线和滚动条的宽)";
-	s += " 网页可见区域高："+ document.body.offsetHeight + " (包括边线的宽)";
-	s += " 网页正文全文宽："+ document.body.scrollWidth;
-	s += " 网页正文全文高："+ document.body.scrollHeight;
-	s += " 网页被卷去的高(ff)："+ document.body.scrollTop;
-	s += " 网页被卷去的高(ie)："+ document.documentElement.scrollTop;
-	s += " 网页被卷去的左："+ document.body.scrollLeft;
-	s += " 网页正文部分上："+ window.screenTop;
-	s += " 网页正文部分左："+ window.screenLeft;
-	s += " 屏幕分辨率的高："+ window.screen.height;
-	s += " 屏幕分辨率的宽："+ window.screen.width;
-	s += " 屏幕可用工作区高度："+ window.screen.availHeight;
-	s += " 屏幕可用工作区宽度："+ window.screen.availWidth;
-	s += " 你的屏幕设置是 "+ window.screen.colorDepth +" 位彩色";
-	s += " 你的屏幕设置 "+ window.screen.deviceXDPI +" 像素/英寸"; 
-	
-	// 常见获取宽度和高度的方法：
-	// domWidth = document.body.clientWidth || document.body.scrollWidth;
-	// domHeight = document.body.clientHeight || document.body.scrollHeight;
 
-
-七、获取某个控件高度的方法
-	var o = document.getElementById("viewID");												//view指控件的ID
-	var h = o.offsetHeight;  //高度
-	var w = o.offsetWidth;  //宽度
-	
-	
-
-//获取浏览器参数
-function getQueryString(name) {
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-	var r = window.location.search.substr(1).match(reg);
-	if (r != null) return unescape(r[2]); return null;
-}
-
-
-
-
-
-十八、COOKIE 封装
-	function getCookie(name){ 
-		var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)"); 
-		if(arr=document.cookie.match(reg)) return unescape(arr[2]); 
-		else return null; 
-	} 
-
-	function setCookie(name,value){
-		var Days = 30;
-		var exp = new Date();
-		exp.setTime(exp.getTime() + Days*24*60*60*1000);
-		document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-	}
-
-	function getCookie(c_name){
-		if (document.cookie.length>0){
-			c_start=document.cookie.indexOf(c_name + "=");
-			if (c_start!=-1){
-				c_start=c_start + c_name.length+1
-				c_end=document.cookie.indexOf(";",c_start)
-				if (c_end==-1) c_end=document.cookie.length
-				return unescape(document.cookie.substring(c_start,c_end))
-			}
-		}
-		return ""
-	}
-
-	function delCookie(name) {
-		var exp = new Date();
-		exp.setTime(exp.getTime() - 1);
-		var cval = getCookie(name);
-		if (cval != null)
-			document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
-	}
 
 
 
@@ -237,10 +437,6 @@ function getQueryString(name) {
 	window.history.back();  // 返回上一页
 	location.reload();		// 网页刷新
 
-// 浏览器回退事件监听
-	location.onPopState(() => {
-		doSomething();
-	});
 
 
 
@@ -248,146 +444,18 @@ function getQueryString(name) {
 
 
 
-// ==============================获取指定时间的间隔日期 start==============================
-/**
- * 获取指定时间的间隔日期
- * dataTemp {String} "2021-03-18" 指定日期
- * days {Number} 5 指定日期后的第5日
- */
-function getNewDay(dateTemp, days) {
-    var dateTemp = dateTemp.split("-");
-    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式
-    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
-    var rDate = new Date(millSeconds);
-    var year = rDate.getFullYear();
-    var month = rDate.getMonth() + 1;
-    if (month < 10) month = "0" + month;
-    var date = rDate.getDate();
-    if (date < 10) date = "0" + date;
-    return (year + "-" + month + "-" + date);
-}
-	
- 
-function getNewDay(dateTemp,days){
-    var d=new Date(dateTemp);
-    d.setDate(d.getDate()+days);
-    var m=d.getMonth()+1;
-    return d.getFullYear()+'-'+m+'-'+d.getDate();
-}	
-
-/* 不兼容火狐 */
-function getNewDay(dateTemp, days) {
-    var dateTemp = dateTemp.split("-");
-    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式
-    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
-    var rDate = new Date(millSeconds);
-    var year = rDate.getFullYear();
-    var month = rDate.getMonth() + 1;
-    if (month < 10) month = "0" + month;
-    var date = rDate.getDate();
-    if (date < 10) date = "0" + date;
-    return (year + "-" + month + "-" + date);
-}
-
-// ==============================获取指定时间的间隔日期 end==============================
 
 
 
 
 
 
-六八、获取浏览器参数方法的两个方法
-a:
-getQueryString: function (name) {		
-	var reg = new RegExp("(^|&)"+name+"=([^&]*)(&|$)");
-	var result = window.location.search.substr(1).match(reg);
-	return result?decodeURIComponent(result[2]):null;
-},		
-b:
-getQueryString: function (name) {		
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-	var r = window.location.search.substr(1).match(reg);
-	if (r != null) return unescape(r[2]); return null;
-},
 
 
 
 
-// 时间戳转换成 yyyy-MM-dd HH-mm-ss
-方法1：
-function formatDateTime(inputTime) {  
-    var date = new Date(inputTime);
-    var y = date.getFullYear();  
-    var m = date.getMonth() + 1;  
-    m = m < 10 ? ('0' + m) : m;  
-    var d = date.getDate();  
-    d = d < 10 ? ('0' + d) : d;  
-    var h = date.getHours();
-    h = h < 10 ? ('0' + h) : h;
-    var minute = date.getMinutes();
-    var second = date.getSeconds();
-    minute = minute < 10 ? ('0' + minute) : minute;  
-    second = second < 10 ? ('0' + second) : second; 
-    return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;  
-};
-
-formatDateTime(inputTime);
 
 
-
-// 特殊时间格式化
-formateDate: function(date){
-	var arr=date.split("T");
-	var d=arr[0];  
-	var darr = d.split('-');
-	var t=arr[1];
-	var tarr = t.split('.000');
-	var marr = tarr[0].split(':');
-	
-	var y = parseInt(darr[0]);
-	var m = parseInt(darr[1]);
-	m = m < 10 ? ('0' + m) : m;
-	var d = parseInt(darr[2]);
-	d = d < 10 ? ('0' + d) : d;
-	var h = parseInt(marr[0]) + 8;
-	h = h < 10 ? ('0' + h) : h;
-	var minute = parseInt(marr[1]);
-	minute = minute < 10 ? ('0' + minute) : minute;
-	var secound = parseInt(marr[2]);
-	secound = secound < 10 ? ('0' + secound) : secound;
-
-	return y +'-'+ m +'-'+ d +' '+ h +':'+ minute +':'+ secound;
-},
-
-
-
-
-// 深拷贝(复制对象的结构和属性，而非指针)
-a: 递归递归去复制所有层级属性。
-	function deepClone(obj){
-		let objClone = Array.isArray(obj)?[]:{};
-		if(obj && typeof obj==="object"){
-			for(key in obj){
-				if(obj.hasOwnProperty(key)){
-					//判断ojb子元素是否为对象，如果是，递归复制
-					if(obj[key]&&typeof obj[key] ==="object"){
-						objClone[key] = deepClone(obj[key]);
-					}else{
-						//如果不是，简单复制
-						objClone[key] = obj[key];
-					}
-				}
-			}
-		}
-		return objClone;
-	}    
-	
-b:JSON对象的parse和stringify
-	JSON.parse(JSON.stringify(obj));
-
-c:JQ的extend方法
-	b=$.extend(true,[],obj);
-	
 
 
 
@@ -608,8 +676,6 @@ document.getElementsByClassName('ppdoFour_right')[0].style.width = elem_ppdoThre
 
 
 
-
-
 // H5 下载图片
 downloadIamge(imgsrc, name) {//下载图片地址和图片名
 	var image = new Image();
@@ -661,20 +727,6 @@ function copy(message) {
 
 
 
-二三、浏览器最大化、最小化、或者改变大小是触发该事件，并且刷新页面
-参考网站：http://www.jb51.net/article/14397.htm
-window.onresize = function(){
-	location.reload(false);		//当为true时重新获取数据加载页面 当为false时获取缓存并刷新页面
-}	
-//当前页面禁用 onresize 事件
-window.onresize = function(e){
-	if(e && e.preventDefault){
-		e.preventDefault();	// 阻止默认事件
-	}else{
-		window.event.returnValue = false;
-	}
-	return false;
-}
 
 
 
@@ -716,28 +768,11 @@ window.onresize = function(e){
 
 
 
-/**
- * 通过浏览器对象 userAgent 中的参数判断浏览器类型
- *
- */
-function myBrowser(){
-    var userAgent = navigator.userAgent;  
-    if (userAgent.indexOf("Opera") > -1) {
-        return "Opera"
-    }; //判断是否Opera浏览器
-    if (userAgent.indexOf("Firefox") > -1) {
-        return "FF";
-    } //判断是否Firefox浏览器
-    if (userAgent.indexOf("Chrome") > -1){
-  		return "Chrome";
- 	}
-    if (userAgent.indexOf("Safari") > -1) {
-        return "Safari";
-    } //判断是否Safari浏览器
-    if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
-        return "IE";
-    }; //判断是否IE浏览器
-}
+
+
+
+
+
 
 
 
