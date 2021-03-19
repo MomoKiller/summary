@@ -98,6 +98,53 @@ window.history.go(-1);  // 返回上一页
 window.history.back();  // 返回上一页
 location.reload();		// 网页刷新
 
+
+// 进入全屏 
+function requestFullScreen() {
+    var de = document.documentElement;
+    if (de.requestFullscreen) {
+        de.requestFullscreen();
+    } else if (de.mozRequestFullScreen) {
+        de.mozRequestFullScreen();
+    } else if (de.webkitRequestFullScreen) {
+        de.webkitRequestFullScreen();
+    }
+}
+
+// 退出全屏
+function exitFullscreen() {
+    var de = document;
+    if (de.exitFullscreen) {
+        de.exitFullscreen();
+    } else if (de.mozCancelFullScreen) {
+        de.mozCancelFullScreen();
+    } else if (de.webkitCancelFullScreen) {
+        de.webkitCancelFullScreen();
+    }
+}
+
+// 设置header透明度渐变
+document.addEventListener('scroll', (e) => {
+  var scrollTop = 0
+  if(document.documentElement&&document.documentElement.scrollTop) {
+	scrollTop = document.documentElement.scrollTop;
+  } else if(document.body) {
+	scrollTop = document.body.scrollTop;
+  }
+  scrollTop = scrollTop > 90 ? 90 : scrollTop
+  this.opacity = scrollTop / 90
+})
+
+
+// 判断是否有滚动条
+if(document.body.style.overflow!="hidden" 
+	&& document.body.scroll!="no"
+	&& document.body.scrollHeight>document.body.offsetHeight){
+	alert("有滚动条");
+}else{
+	alert("无滚动条");
+}
+
 //**********浏览器事件 end**********
 
 
@@ -267,7 +314,7 @@ function delCookie(name) {
 	屏幕彩色位设置是: window.screen.colorDepth;
 	屏幕像素/英寸设置: window.screen.deviceXDPI; 
 	
-// 常见获取宽度和高度的方法：
+// 常见获取浏览器宽度和高度的方法：
 	domWidth = document.body.clientWidth || document.body.scrollWidth;
 	domHeight = document.body.clientHeight || document.body.scrollHeight;
 
@@ -275,6 +322,11 @@ function delCookie(name) {
 // 获取dom控件的宽高
 	document.getElementById('#viewID').offsetHeight;
 	document.getElementById('#viewID').offsetWidth;
+	
+	
+// 设置dom空间的宽高
+	document.getElementById('#viewID').style.height = "10px";
+	document.getElementById('#viewID').style.width = "10px";	
 
 //**********页面宽高获取 end**********
 
@@ -305,10 +357,10 @@ a: 递归递归去复制所有层级属性。
 		return objClone;
 	}    
 	
-b:JSON对象的parse和stringify
+b: JSON对象的parse和stringify
 	JSON.parse(JSON.stringify(obj));
 
-c:JQ的extend方法
+c: JQ的extend方法
 	b=$.extend(true,[],obj);
 	
 //**********深拷贝 end**********	
@@ -521,102 +573,40 @@ document.onkeydown=function(event){
 
 
 
+//**********js 判断页面加载完成  start**********
 
+document.onreadystatechange = this.isOnReady;
+isOnReady() {
+  if (document.readyState == "complete") {
+	doSomething()....
+  }
+},
 
-
-
-
-// 进入全屏 
-function requestFullScreen() {
-    var de = document.documentElement;
-    if (de.requestFullscreen) {
-        de.requestFullscreen();
-    } else if (de.mozRequestFullScreen) {
-        de.mozRequestFullScreen();
-    } else if (de.webkitRequestFullScreen) {
-        de.webkitRequestFullScreen();
-    }
-}
-
-
-// 退出全屏
-function exitFullscreen() {
-    var de = document;
-    if (de.exitFullscreen) {
-        de.exitFullscreen();
-    } else if (de.mozCancelFullScreen) {
-        de.mozCancelFullScreen();
-    } else if (de.webkitCancelFullScreen) {
-        de.webkitCancelFullScreen();
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 另一种保存两位小数的方式
-Math.floor(numObj*100)/100
-
-
-
-
-// js加载顺序--宏任务/微任务 
-console.log('a');
-setTimeout(() => {
-    console.log('b');
-}, 0);
-console.log('c');
-Promise.resolve().then(() => {
-    console.log('d');
-})
-.then(() => {
-    console.log('e');
+// js 判断页面加载完成 -- VUE
+this.$nextTick(() => {
+	doSomething()....
 });
 
-console.log('f');
-
-
-
-
-// 判断是 Array 和 Object 数组或JOSN对象
-Object.prototype.toString.call(value) === "[object Array]"		// 判断是否数组
-Object.prototype.toString.call(value) === "[object Object]"		// 判断是否JSON
-// 延伸
-Object.prototype.toString.call(window) === "[object Window]"	// Window 对象
-Object.prototype.toString.call(Window) === "[object Function]"	// Window 为Function 对象
+//**********js 判断页面加载完成  end**********
 
 
 
 
 
 
+//**********数组方法 start**********
 
+var array = [a,b,c,d,e,f,g];
+array.join(',');  		// "a,b,c,d,e,f,g"
+result.split(','); 		// [a,b,c,d,e,f,g]
 
-// 关于函数join()和split()
-	var array = [a,b,c,d,e,f,g];
-	array.join(',');  		// "a,b,c,d,e,f,g"
-	result.split(','); 		// [a,b,c,d,e,f,g]
+// indexOf()函数 返回在 String 对象中第一次出现子字符串的字符位置。当未找到返回值时则返回 -1
+var str = "hello world!";
+var a=str.indexOf("hello");		// a=0;
+var b=str.indexOf("Hello");		// b=-1;
+var c=str.indexOf("world");		// c=6;
 	
-	
-
-
- 
+//**********数组方法 end**********
 
 
 
@@ -624,30 +614,9 @@ Object.prototype.toString.call(Window) === "[object Function]"	// Window 为Func
 
 
 
+//**********类、构造函数  start**********
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//构造函数继承
+// 构造函数继承
 function fn(){
 	this.name = "hello ";
 }
@@ -667,14 +636,6 @@ yxl.prototype = new fn();
 var test2 = new yxl();
 test2.name += "world";
 console.log(test2.name);
-
-
-
-
-
-
-
-
 
 
 // JS 类的概念
@@ -708,6 +669,7 @@ Point.prototype.toValue() = function() {
 	return this.x+this.y;
 }
 
+//**********类、构造函数  end**********
 
 
 
@@ -715,28 +677,25 @@ Point.prototype.toValue() = function() {
 
 
 
-	
+
+
+//**********Math方法  start**********
+
+// 一种保存两位小数的方式
+Math.floor(numObj*100)/100
+
+
+//**********Math方法  end**********
 
 
 
 
 
 
-// 设置header透明度渐变
-document.addEventListener('scroll', (e) => {
-  var scrollTop = 0
-  if(document.documentElement&&document.documentElement.scrollTop) {
-	scrollTop = document.documentElement.scrollTop;
-  } else if(document.body) {
-	scrollTop = document.body.scrollTop;
-  }
-  scrollTop = scrollTop > 90 ? 90 : scrollTop
-  this.opacity = scrollTop / 90
-})
 
 
+//**********阶乘计算  start**********
 
-// 阶乘计算
 var mult = function(){     
 	console.log( '开始计算乘积' );     
 	var a = 1;     
@@ -747,43 +706,42 @@ var mult = function(){
 };
 mult(2,3,5);
 
+//**********阶乘计算  end**********
 
 
 
-// 金额展示  3位数字用","间隔
+
+
+
+
+
+
+//**********金额展示3位数字用 , 间隔  start**********
+
 filters: {
 	thousandBit(value) {
 	  return value ? String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0;
 	}
 },
 
-
-
-
-// js 判断页面加载完成
-document.onreadystatechange = this.isOnReady;
-isOnReady() {
-  if (document.readyState == "complete") {
-	doSomething()....
-  }
-},
-
-// js 判断页面加载完成 -- VUE
-this.$nextTick(() => {
-	doSomething()....
-});
+//**********金额展示3位数字用 , 间隔  end**********
 
 
 
 
 
-// 原生js 改变高度
-var domWidth =document.getElementsByClassName('ppdoFour_d_d fl_l')[0].offsetHeight;
-var domHeight =document.getElementsByClassName('ppdoFour_d_d fl_l')[0].offsetWidth;
-document.getElementsByClassName('ppdoFour_right')[0].style.height = elem_ppdoFour_width-1+"px";
-document.getElementsByClassName('ppdoFour_right')[0].style.width = elem_ppdoThree_height-1+"px";
 
 
+
+//**********判断是 Array 和 Object 数组或JOSN对象  start**********
+
+Object.prototype.toString.call(value) === "[object Array]"		// 判断是否数组
+Object.prototype.toString.call(value) === "[object Object]"		// 判断是否JSON
+// 延伸
+Object.prototype.toString.call(window) === "[object Window]"	// Window 对象
+Object.prototype.toString.call(Window) === "[object Function]"	// Window 为Function 对象
+
+//**********判断是 Array 和 Object 数组或JOSN对象  end**********
 
 
 
@@ -795,8 +753,8 @@ document.getElementsByClassName('ppdoFour_right')[0].style.width = elem_ppdoThre
 		
 	
 
+//**********复制文本到剪切板 - js兼容安卓和IOS的 start**********
 
-// 复制文本到剪切板 - js兼容安卓和IOS的
 function copy(message) {
 	var input = document.createElement("input");
 	input.value = message;
@@ -804,22 +762,9 @@ function copy(message) {
 	input.select();
 	input.setSelectionRange(0, input.value.length), document.execCommand('Copy');
 	document.body.removeChild(input);
-	$.toast("复制成功", "text");
 }
 
-
-
-
-
-十九、indexOf()函数 返回在 String 对象中第一次出现子字符串的字符位置。当未找到返回值时则返回 -1
-	var str = "hello world!";
-	var a=str.indexOf("hello");
-	var b=str.indexOf("Hello");
-	var c=str.indexOf("world");
-	返回结果：
-	a=0;
-	b=-1; //区分大小写 查找无结果 返回 -1
-	c=6;
+//**********复制文本到剪切板 - js兼容安卓和IOS的 start**********
 
 
 
@@ -827,22 +772,29 @@ function copy(message) {
 
 
 
-//****************控制html或jsp页面乱码 加载css start*********************	
+
+
+//**********控制html或jsp页面乱码 加载css start**********
+
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-//****************控制html或jsp页面乱码 加载css end*********************
 	
-	
-	
-//****************favicon.ico图标位置 加载css start*********************
+// favicon.ico图标位置 加载css start	
 	<link rel="icon" href="favicon.ico">
-//****************favicon.ico图标位置 加载css end*********************	
+	
+//**********控制html或jsp页面乱码 加载css end**********
+	
+	
+	
+	
+	
 
 
 
+//**********JS数组去重  start**********
 
-三五、 JS数组去重
+	1、JS数组去重
 	function unique(arr) {
 		var result = [], hash = {};
 		for (var i = 0, elem; (elem = arr[i]) != null; i++) {
@@ -853,6 +805,7 @@ function copy(message) {
 		}
 		return result;
 	}
+	
 	2、利用 Object.keys() 方法枚举 && 对象不能有相同的属性方法 
 	function unique(arr){
 		var tempKey = {};
@@ -863,6 +816,7 @@ function copy(message) {
 	}
 
 
+//**********JS数组去重  end**********
 
 
 
@@ -874,11 +828,8 @@ function copy(message) {
 
 
 
+//********** Throw 声明  start**********
 
-
-
-
-六五、Throw 声明 - 报错处理
 	var x=prompt("请输入 0 至 10 之间的数：","")
 	try
 	{ 
@@ -899,19 +850,11 @@ function copy(message) {
 		  alert("错误！该值不是数字！") 
 	}
 
+//********** Throw 声明  start**********
 
 
 
 
-
-//七十、判断是否有滚动条
-if(document.body.style.overflow!="hidden" 
-	&& document.body.scroll!="no"
-	&& document.body.scrollHeight>document.body.offsetHeight){
-	alert("有滚动条");
-}else{
-	alert("无滚动条");
-}
 
 
 
