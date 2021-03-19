@@ -19,7 +19,7 @@
 
 
 
-//**********************浏览器事件 start*********************
+//**********浏览器事件 start**********
 
 // 浏览器回退监听
 location.onPopState(() => {
@@ -42,6 +42,20 @@ getQueryString: function (name) {
 	if (r != null) return unescape(r[2]); return null;
 },
 
+
+// 获取浏览器中所有参数
+function getQueryString() {
+	var url = location.search; //获取url中"?"符后的字串
+	var theRequest = new Object();
+		if (url.indexOf("?") != -1) {
+		   var str = url.substr(1);
+			strs = str.split("&");
+		      for(var i = 0; i < strs.length; i ++) {
+		         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+		      }
+		   }
+	return theRequest;		
+}	
 
 
 // 浏览器 resize 事件监听 -- 参考网站：http://www.jb51.net/article/14397.htm
@@ -80,33 +94,24 @@ function myBrowser(){
     }; //判断是否IE浏览器
 }
 
-//**********************浏览器事件 end*********************
+window.history.go(-1);  // 返回上一页
+window.history.back();  // 返回上一页
+location.reload();		// 网页刷新
+
+//**********浏览器事件 end**********
 
 
 
 
 
-//**********************日期时间设置 start*********************
+//**********日期时间设置 start**********
 
 /**
  * 获取指定时间的间隔日期
  * dataTemp {String} "2021-03-18" 指定日期
  * days {Number} 5 指定日期后的第5日
  */
-function getNewDay(dateTemp, days) {
-    var dateTemp = dateTemp.split("-");
-    var nDate = new Date(dateTemp[1] + '-' + dateTemp[2] + '-' + dateTemp[0]); //转换为MM-DD-YYYY格式
-    var millSeconds = Math.abs(nDate) + (days * 24 * 60 * 60 * 1000);
-    var rDate = new Date(millSeconds);
-    var year = rDate.getFullYear();
-    var month = rDate.getMonth() + 1;
-    if (month < 10) month = "0" + month;
-    var date = rDate.getDate();
-    if (date < 10) date = "0" + date;
-    return (year + "-" + month + "-" + date);
-}
-	
- 
+
 function getNewDay(dateTemp,days){
     var d=new Date(dateTemp);
     d.setDate(d.getDate()+days);
@@ -128,6 +133,7 @@ function getNewDay(dateTemp, days) {
     return (year + "-" + month + "-" + date);
 }
 
+
 // 时间戳转换成 yyyy-MM-dd HH-mm-ss
 function formatDateTime(inputTime) {  
     var date = new Date(inputTime);
@@ -144,6 +150,24 @@ function formatDateTime(inputTime) {  
     second = second < 10 ? ('0' + second) : second; 
     return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;  
 };
+
+// 获取当前日期
+function getCurrentDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+    return currentdate;
+}
+
 
 // 特殊时间格式化
 formateDate: function(date){
@@ -172,14 +196,14 @@ formateDate: function(date){
 /* 获取当前时间的时间戳 -- 毫秒（ms） */
 new Date().getTime();
 
-//**********************日期时间设置 end*********************
+//**********日期时间设置 end**********
 
 
 
 
 
 
-//**********************COOKIE 封装 start*********************
+//**********COOKIE 封装 start**********
 
 function getCookie(name){ 
 	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)"); 
@@ -215,7 +239,7 @@ function delCookie(name) {
 		document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
 }
 
-//**********************COOKIE 封装 end*********************
+//**********COOKIE 封装 end**********
 
 
 
@@ -223,7 +247,7 @@ function delCookie(name) {
 
 
 
-//**********************页面宽高获取 start*********************
+//**********页面宽高获取 start**********
 
 	网页可见区域宽：document.body.clientWidth;
 	网页可见区域高：document.body.clientHeight;
@@ -252,14 +276,14 @@ function delCookie(name) {
 	document.getElementById('#viewID').offsetHeight;
 	document.getElementById('#viewID').offsetWidth;
 
-//**********************页面宽高获取 end*********************
+//**********页面宽高获取 end**********
 
 
 
 
 
 
-//**********************深拷贝 start*********************
+//**********深拷贝 start**********
 
 // 复制对象的结构和属性，而非指针
 a: 递归递归去复制所有层级属性。
@@ -287,7 +311,7 @@ b:JSON对象的parse和stringify
 c:JQ的extend方法
 	b=$.extend(true,[],obj);
 	
-//**********************深拷贝 end*********************	
+//**********深拷贝 end**********	
 
 
 
@@ -295,7 +319,7 @@ c:JQ的extend方法
 
 
 
-//**********************动态加载 js 文件 start*********************	
+//**********动态加载 js 文件 start**********	
 
 (function(){
 	var srcript, 
@@ -326,7 +350,217 @@ function loadjs(script_filename) {
     document.getElementsByTagName('head')[0].appendChild(script);
 }
 
-//**********************动态加载 js 文件 end*********************	
+//**********动态加载 js 文件 end**********	
+
+
+
+
+
+//**********postMessage通信 js 文件 start**********	
+
+1、父页面向子 iframe 传值
+
+/**
+ * 父节点数据传递：
+ * 
+ * msgObj {Object} 需要传递的对象
+ * url {String} 可选参数 
+ */
+	var frame = document.getElementById('faIframe');
+	frame.contentWindow.postMessage(msgObj, url);
+	
+/**
+ * 子节点接收数据：
+ *
+ * message 监听 message 对象，获取父节点推送消息
+ */
+	window.addEventListener('message', function(e){
+		var data = e.data;
+		...
+	});
+	
+2、子 iframe 向父页面传值
+
+/**
+ * 子节点数据传递：
+ * 
+ * msgObj {Object} 需要传递的对象
+ * url {String} 可选参数 
+ */
+	window.parent.postMessage(msgObj, url);
+	
+/**
+ * 父节点接收数据：
+ *
+ * message 监听 message 对象，获取子节点推送消息
+ */
+	window.addEventListener('message', function(e){
+		var data = e.data;
+		...
+	});
+	
+//**********postMessage通信 js 文件 end**********	
+
+
+
+
+
+
+
+
+//**********下载图片地址和图片名  start**********	
+
+function downloadIamge(imgsrc, name) {
+	var image = new Image();
+	image.setAttribute("crossOrigin", "anonymous");	 		// 解决跨域 Canvas 污染问题
+	image.onload = function () {
+		var canvas = document.createElement("canvas");
+		canvas.width = image.width;
+		canvas.height = image.height;
+		var context = canvas.getContext("2d");
+		context.drawImage(image, 0, 0, image.width, image.height);
+		var url = canvas.toDataURL("image/png"); 			//得到图片的base64编码数据
+		var a = document.createElement("a"); 				// 生成一个a元素
+		var event = new MouseEvent("click"); 				// 创建一个单击事件
+		a.download = name || "photo"; 						// 设置图片名称
+		a.href = url; 										// 将生成的URL设置为a.href属性
+		a.dispatchEvent(event); 							// 触发a的单击事件
+	};
+	image.src = imgsrc;
+}
+
+
+/**
+ * 文件下载
+ * fileName {String} 下载的文件名 	
+ * url {String}  文件下载地址，链接
+ */
+function download(filename, url){
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true);
+	xhr.responseType = 'blob';
+	xhr.onload = ()=> {
+		if (xhr.status === 200) {
+			let blob = xhr.response;
+			if (window.navigator.msSaveOrOpenBlob) {
+				navigator.msSaveBlob(blob, filename);
+			} else {
+				let link = document.createElement('a');
+				let body = document.querySelector('body');
+				link.href = window.URL.createObjectURL(blob);
+				link.download = filename;
+				link.style.display = 'none';
+				body.appendChild(link);
+				link.click();
+				body.removeChild(link);
+				window.URL.revokeObjectURL(link.href);
+			};
+		}
+	};
+	xhr.send();
+}
+
+
+//**********下载图片地址和图片名  end**********	
+
+
+
+
+
+
+//**********节流|防抖  start**********	
+
+// 节流 | 时间间隔内会执行一次 
+var isUsed = false;
+if(!isUsed) {
+	doSomething();			// 第一次执行代码
+	setTimeout(() => {
+		isUsed = false; 	// 状态重置
+	}, 400);
+}
+
+// 防抖 | 最后一次执行
+var timer = null;
+if(timer){
+	clearTimer(timer);
+	timer = null;
+	timer = setTimeout(() => {
+		doSomething();
+	}, 400);
+}else{
+	timer = setTimeout(() => {
+		doSomething();
+	}, 400);
+}
+
+//**********节流|防抖  end**********
+
+
+
+
+
+//**********键盘监听事件  start**********	
+
+document.onkeydown=function(event){
+    var e = event || window.event || arguments.callee.caller.arguments[0];
+	if(e && e.keyCode==13){ // enter 键
+		doSomething();
+	}
+	if(e && e.keyCode==27){ // 按 Esc 
+        doSomething();
+	}
+	if(e && e.keyCode==113){ // 按 F2 
+        doSomething();
+	}            
+}; 
+
+//**********键盘监听事件  end**********	
+
+
+
+
+
+
+
+
+
+
+
+// 进入全屏 
+function requestFullScreen() {
+    var de = document.documentElement;
+    if (de.requestFullscreen) {
+        de.requestFullscreen();
+    } else if (de.mozRequestFullScreen) {
+        de.mozRequestFullScreen();
+    } else if (de.webkitRequestFullScreen) {
+        de.webkitRequestFullScreen();
+    }
+}
+
+
+// 退出全屏
+function exitFullscreen() {
+    var de = document;
+    if (de.exitFullscreen) {
+        de.exitFullscreen();
+    } else if (de.mozCancelFullScreen) {
+        de.mozCancelFullScreen();
+    } else if (de.webkitCancelFullScreen) {
+        de.webkitCancelFullScreen();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -338,8 +572,6 @@ function loadjs(script_filename) {
 
 // 另一种保存两位小数的方式
 Math.floor(numObj*100)/100
-
-
 
 
 
@@ -362,7 +594,7 @@ console.log('f');
 
 
 
-// 判断是Array 和 Object  数组或JOSN对象
+// 判断是 Array 和 Object 数组或JOSN对象
 Object.prototype.toString.call(value) === "[object Array]"		// 判断是否数组
 Object.prototype.toString.call(value) === "[object Object]"		// 判断是否JSON
 // 延伸
@@ -371,13 +603,6 @@ Object.prototype.toString.call(Window) === "[object Function]"	// Window 为Func
 
 
 
-
-// BASE64 图片格式的使用
-HTML:
-	<img id="logoString" src="images/homePage/unlog.png" alt="..."/>
-JS:
-	var logoString = "iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAGu5JREFUeNqsenlwXPd93+ede9+LxX0DBEESJCiRJikeMk0lsh1JI9lSxqrstknqxuM6bdJ/mjozqcZxpzNNZ5yZuI2rxm3qzKSK3Ti6fOgKJdKiSBEUTxAEcRLXAthd7H28u5+3oI7Ybu1JhZk3AHb3vff7Xp/j91ZwHAdmLouf/nFECbZWh90w4UD80BuAUN+E4E1DiQfhmCKsegZKqA+11Qn4kmMwCosRCPaArTkPlufOPFycXXe83YdesPTSj2HU7qQOPVI0Shnkrp1DMLUX+bUbCPbuRWL0MDLnv4/kic9DVH3bN+OPICnQ8ndQW7/Gv9WfWWvrfZ+HjI/iRxDdG0uKN7C/mpk+aWwt/mp57drxmYuTnqIVwcjxcQjVt47KhvrvLETfzs9OnIPlnJdU3xVJ9qx9FEuQ///WL0FUPP1mpfZQdvKVT5YWL9+TnrzYtrwsYGo5iCuZ3Vg3etA5H8Ou/iSGEgV/qzd3qrX6yilV8uqCEL9ZXyxeFgTPT0RReYvXmhYE8efd6e7xUQbCVuS9ekRZfqi8fOUTlfTcxzYnL3ZvpkuYvhPBanUcVrANvl4FR4aqiEVUmHYVpY0clmqtuOkkYdTbkfQX1NGO9fHW4Oy435v4QvnmnezGjR/NBfyxVyRZ+brj2LbbWoIkw7EMHvr/M5hfHIjg9qkIQbg7H171yVL+8p9unnspkVtZwdqGg6sbw6gqQ+gf8uKBAQ0jOxRIxiwqSwvwhOMQg93I3boCSQwC/iSWNoI4Px3GMy/74VUsjPdk5AO7zbaeTm/b2uULR3zT5/9aDkanBcZi1crQ8xk0SlNI7joO29D+gYGIBvPgh+Ll8JsCpJj8Txa/91zi3Ku3cNU6hYXKLhw6HMQT+yYxkJyFJXrQ2ALqpQKqeQm++hakKm8T70GjrhE8auiJ";
-	$("#logoString").attr("src","data:image/jpg;base64,"+logoString);
 
 
 
@@ -394,48 +619,7 @@ JS:
  
 
 
-// 键盘监听事件
-document.onkeydown=function(event){
-    var e = event || window.event || arguments.callee.caller.arguments[0];
-	if(e && e.keyCode==13){ // enter 键
-		doSomething();
-	}
-	if(e && e.keyCode==27){ // 按 Esc 
-        doSomething();
-	}
-	if(e && e.keyCode==113){ // 按 F2 
-        doSomething();
-	}            
-}; 
 
-
-
-
-// 获取当前页面url中参数的 方法
-function GetRequest() {
-	var url = location.search; //获取url中"?"符后的字串
-	var theRequest = new Object();
-		if (url.indexOf("?") != -1) {
-		   var str = url.substr(1);
-			strs = str.split("&");
-		      for(var i = 0; i < strs.length; i ++) {
-		         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
-		      }
-		   }
-	return theRequest;		
-}	
-
-
-
-
-
-
-
-
-六二、
-	window.history.go(-1);  // 返回上一页
-	window.history.back();  // 返回上一页
-	location.reload();		// 网页刷新
 
 
 
@@ -493,7 +677,7 @@ console.log(test2.name);
 
 
 
-// CLASS <=> 构造函数  ->  原型链继承
+// JS 类的概念
 class Point {
 	constructor (x, y) {
 		this.x =x;
@@ -530,78 +714,9 @@ Point.prototype.toValue() = function() {
 
 
 
-// postMessage iframe与页面之间的通信
-1、父页面向子 iframe 传值
-	a：获取父页面dom,  postMessage 发送data 和 子 iframe 的地址;
-	var frame = document.getElementById('faIframe');
-	frame.contentWindow.postMessage(dataValue, 'data传递iframe的url');
-	
-	b: 子 iframe 监听获取父页面传递值;
-	window.addEventListener('message', function(e){
-		var data = e.data;
-		...
-	});
-	
-2、子 iframe 向父页面传值
-	a: 子 iframe 向父级传送 data 和 父页面地址
-	window.parent.postMessage(data, 'url...');
-	
-	b: 父页面监听获取数据
-	window.addEventListener('message', function(e){
-		var data = e.data;
-		...
-	});
-	
+
 	
 
-// 进入全屏 
-function requestFullScreen() {
-    var de = document.documentElement;
-    if (de.requestFullscreen) {
-        de.requestFullscreen();
-    } else if (de.mozRequestFullScreen) {
-        de.mozRequestFullScreen();
-    } else if (de.webkitRequestFullScreen) {
-        de.webkitRequestFullScreen();
-    }
-}
-
-
-// 退出全屏
-function exitFullscreen() {
-    var de = document;
-    if (de.exitFullscreen) {
-        de.exitFullscreen();
-    } else if (de.mozCancelFullScreen) {
-        de.mozCancelFullScreen();
-    } else if (de.webkitCancelFullScreen) {
-        de.webkitCancelFullScreen();
-    }
-}
-
-
-// 节流 | 时间间隔内会执行一次 
-var isUsed = false;
-if(!isUsed) {
-	doSomething();			// 第一次执行代码
-	setTimeout(() => {
-		isUsed = false; 	// 状态重置
-	}, 400);
-}
-
-// 防抖 | 最后一次执行
-var timer = null;
-if(timer){
-	clearTimer(timer);
-	timer = null;
-	timer = setTimeout(() => {
-		doSomething();
-	}, 400);
-}else{
-	timer = setTimeout(() => {
-		doSomething();
-	}, 400);
-}
 
 
 
@@ -676,26 +791,7 @@ document.getElementsByClassName('ppdoFour_right')[0].style.width = elem_ppdoThre
 
 
 
-// H5 下载图片
-downloadIamge(imgsrc, name) {//下载图片地址和图片名
-	var image = new Image();
-	// 解决跨域 Canvas 污染问题
-	image.setAttribute("crossOrigin", "anonymous");
-	image.onload = function () {
-		var canvas = document.createElement("canvas");
-		canvas.width = image.width;
-		canvas.height = image.height;
-		var context = canvas.getContext("2d");
-		context.drawImage(image, 0, 0, image.width, image.height);
-		var url = canvas.toDataURL("image/png"); //得到图片的base64编码数据
-		var a = document.createElement("a"); // 生成一个a元素
-		var event = new MouseEvent("click"); // 创建一个单击事件
-		a.download = name || "photo"; // 设置图片名称
-		a.href = url; // 将生成的URL设置为a.href属性
-		a.dispatchEvent(event); // 触发a的单击事件
-	};
-	image.src = imgsrc;
-}
+
 		
 	
 
@@ -731,17 +827,17 @@ function copy(message) {
 
 
 
-//****************************控制html或jsp页面乱码 加载css start********************************	
+//****************控制html或jsp页面乱码 加载css start*********************	
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-//****************************控制html或jsp页面乱码 加载css end********************************
+//****************控制html或jsp页面乱码 加载css end*********************
 	
 	
 	
-//****************************favicon.ico图标位置 加载css start********************************
+//****************favicon.ico图标位置 加载css start*********************
 	<link rel="icon" href="favicon.ico">
-//****************************favicon.ico图标位置 加载css end********************************	
+//****************favicon.ico图标位置 加载css end*********************	
 
 
 
@@ -776,23 +872,6 @@ function copy(message) {
 
 
 
-
-// 获取当前日期
-function getCurrentDate() {
-    var date = new Date();
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month >= 1 && month <= 9) {
-        month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-    }
-    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
-    return currentdate;
-}
 
 
 
@@ -834,38 +913,6 @@ if(document.body.style.overflow!="hidden"
 	alert("无滚动条");
 }
 
-
-
-
-/**
- * 文件下载
- * fileName {String} 下载的文件名 	
- * url {String}  文件下载地址，链接
- */
-let download => (filename,url){
-	let xhr = new XMLHttpRequest();
-	xhr.open('GET', url, true);
-	xhr.responseType = 'blob';
-	xhr.onload = ()=> {
-		if (xhr.status === 200) {
-			let blob = xhr.response;
-			if (window.navigator.msSaveOrOpenBlob) {
-				navigator.msSaveBlob(blob, filename);
-			} else {
-				let link = document.createElement('a');
-				let body = document.querySelector('body');
-				link.href = window.URL.createObjectURL(blob);
-				link.download = filename;
-				link.style.display = 'none';
-				body.appendChild(link);
-				link.click();
-				body.removeChild(link);
-				window.URL.revokeObjectURL(link.href);
-			};
-		}
-	};
-	xhr.send();
-}
 
 
 

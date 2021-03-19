@@ -315,3 +315,82 @@ HTML:
 
 
 
+
+
+
+//图片转 base64 方法
+
+
+let imgSrc = "https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png";
+
+
+/**
+ * xhr请求图片,并设置返回的文件类型为Blob对象
+ * FileReader 对象接收blob
+ */
+function getBase64(imgUrl) {
+  window.URL = window.URL || window.webkitURL;
+  var xhr = new XMLHttpRequest();
+  xhr.open("get", imgUrl, true);
+  xhr.responseType = "blob";
+  xhr.onload = function () {
+    if (this.status == 200) {
+      var blob = this.response;                 //得到一个blob对象
+      console.log("blob", blob)
+      let oFileReader = new FileReader();
+      oFileReader.onloadend = function (e) {
+        let base64 = e.target.result;
+        console.log("[base64对象]", base64);
+      };
+      oFileReader.readAsDataURL(blob);
+
+    }
+  }
+  xhr.send();
+}
+
+getBase64(imgSrc);
+	
+	
+
+/**
+ * canvas.toDataURL()
+ *
+ */
+function getBase64Image(img, width, height) {
+  var canvas = document.createElement("canvas");
+  canvas.width = width ? width : img.width;
+  canvas.height = height ? height : img.height;
+  var ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  var dataURL = canvas.toDataURL();
+  return dataURL;
+}
+
+function getCanvasBase64(img) {
+	var image = new Image();
+	image.crossOrigin = '';
+	image.src = img;
+	image.onload = function () {
+		console.log("[base64对象]", getBase64Image(image));
+	}
+}
+
+getCanvasBase64(imgSrc);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
