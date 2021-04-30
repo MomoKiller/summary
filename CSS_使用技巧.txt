@@ -753,10 +753,10 @@ c: table 奇数行偶数行
 
 
 十二、表格设置合并边框模型(页面)：   
- table
-  {
-	border-collapse:collapse;
-  }
+	table
+	{
+		border-collapse:collapse;
+	}
 
 	
 
