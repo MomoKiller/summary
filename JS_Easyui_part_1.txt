@@ -45,6 +45,11 @@ $ git fetch --all
 $ git reset --hard origin/master 
 $ git pull
 
+// 添加tag
+$ git tag -a v1.4 -m "my version 1.4"
+
+// 删除远程分支
+git push origin --delete [branchname]
 
 
 // chrome 浏览器调试
