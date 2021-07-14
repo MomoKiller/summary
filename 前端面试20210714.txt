@@ -1,0 +1,71 @@
+美团：
+
+  vue和react异同 diff算法上的区别
+  https为什么安全？如何防止中间人攻击（伪造证书）
+  性能优化的方案
+  webpack loader和plugin的区别
+  vue的响应式原理
+  从输入网址到浏览器加载都发生了什么，什么情况下会阻塞浏览器渲染过程
+
+众安：
+
+  线上监控实现
+  webpack有哪些配置选项
+  webpack plugin和loader区别
+  webpack怎么写plugin
+  webpack异步加载怎么实现的
+  webpack hmr实现机制
+  跨域解决方案
+  前端性能优化方案
+  vue的响应式原理
+  vue3 composition怎么实现的
+  computed和watch区别
+  react生命周期
+  new操作符做了什么
+  node.js有哪些模块
+  node.js的事件循环机制
+  浏览器缓存策略
+
+平安：
+
+一面技术
+Vue双向绑定原理 vue2&vue3差别
+template编译做了哪些优化
+Virtual dom作用 vfor循环中key的意义
+Vuex作用
+computed和watch区别
+diff算法作用
+事件循环机制
+作用域链
+性能优化方案
+首屏加载速度优化
+项目中的难点
+权限管理方案
+Vue和react的区别
+排序算法 任写一个
+封装过哪些组件
+nextTick含义
+
+平安二面项目
+
+项目的架构方案
+
+得物：
+
+js执行上下文
+作用域链
+水平垂直居中
+bind的实现原理
+apply和call的用法
+箭头函数this指向
+js继承方式
+
+二面：
+针对自己项目的想法
+学习的自驱力和学习途径
+
+
+阿里/饿了么：
+
+一面：写代码
+二面：项目经验
